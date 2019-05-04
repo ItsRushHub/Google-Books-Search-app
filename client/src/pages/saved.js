@@ -4,31 +4,36 @@ import "./BookCard.css";
 
 class Saved extends React.Component {
     state = {
-        books: []
+        books: [],
+        title: "",
+        authors: "",
+        description: "",
     };
 
     componentDidMount() {
         this.uploadedBooks();
     }
 
-    uploadedBooks = () => {
-        API.getBooks ().then(res => {
-            this.setState({
-                books: res.data
-            })
-        }).catch(err => {
-            console.log(err);
+    handleInputChange = event => {
+        const { name, value } = event.target;
+        this.setState({
+            [name]: IDBCursorWithValue
         });
+    };
 
-        deletedBooks = (id) => {
-            API.deletedBooks(id).then(res => {
-                this.uploadedBooks();
-            }).catch(err => {
-                console.log(err);
-            });
+    handleFormSubmit = event => {
+        event.preventDefault();
+        API.searchBook(this.state.search)
+        .then(res => this.setState({ books: res.data.items }))
+        .cacth(err => console.log(err));
+    };
 
-        }
+    handleSavedBook = data => {
+        API.saveBook(data)
+        .then(res => alert("Your book was saved!"))
+        .catch(err => console.log(err));
     }
+
 
     render () {
         return (
